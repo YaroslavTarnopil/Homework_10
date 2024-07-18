@@ -1,0 +1,7 @@
+<!-- quotes/templates/index.html -->
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h1>Welcome to the Quotes Site</h1>
+  <a href="{% url 'scrape_quotes' %}">Scrape Quotes</a>
+{% endblock %}

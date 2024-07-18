@@ -1,0 +1,18 @@
+<!-- quotes/templates/base_generic.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}My Quotes Site{% endblock %}</title>
+</head>
+<body>
+    <div>
+        <h2>Top Ten Tags</h2>
+        <ul>
+            {% for tag in top_tags %}
+                <li><a href="{% url 'tag_quotes' tag.name %}">{{ tag.name }}</a> ({{ tag.num_quotes }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% block content %}{% endblock %}
+</body>
+</html>
