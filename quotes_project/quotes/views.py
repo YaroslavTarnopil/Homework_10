@@ -1,17 +1,7 @@
-from django.shortcuts import render
-
-# Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import RegisterForm
-from django.shortcuts import render, get_object_or_404
-from .models import Tag, Quote
-from django.db.models import Count
-from django.contrib.auth.decorators import login_required
-from .forms import AuthorForm, QuoteForm
-from django.core.paginator import Paginator
-
 
 def register(request):
     if request.method == 'POST':
@@ -34,6 +24,9 @@ def login_view(request):
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
+
+from django.contrib.auth.decorators import login_required
+from .forms import AuthorForm, QuoteForm
 
 @login_required
 def add_author(request):
@@ -67,18 +60,26 @@ def quote_list(request):
     quotes = Quote.objects.all()
     return render(request, 'quote_list.html', {'quotes': quotes})
 
+
+from django.shortcuts import render, get_object_or_404
+from .models import Tag, Quote
+
 def tag_quotes(request, tag_name):
     tag = get_object_or_404(Tag, name=tag_name)
     quotes = tag.quotes.all()
     return render(request, 'tag_quotes.html', {'tag': tag, 'quotes': quotes})
 
+from django.db.models import Count
+
 def top_tags(request):
     top_tags = Tag.objects.annotate(num_quotes=Count('quotes')).order_by('-num_quotes')[:10]
     return {'top_tags': top_tags}
 
+from django.core.paginator import Paginator
+
 def quote_list(request):
     quotes = Quote.objects.all()
-    paginator = Paginator(quotes, 10)  # 10 цитат на сторінку
+    paginator = Paginator(quotes, 10)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'quote_list.html', {'page_obj': page_obj})
@@ -103,4 +104,3 @@ def scrape_quotes(request):
             quote.tags.add(tag)
 
     return render(request, 'scrape_quotes.html', {'status': 'Quotes have been scraped and saved!'})
-

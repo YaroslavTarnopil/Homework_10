@@ -16,8 +16,6 @@ urlpatterns += [
     path('quotes/', views.quote_list, name='quote_list'),
 ]
 
-
 urlpatterns = [
     path('tag/<str:tag_name>/', views.tag_quotes, name='tag_quotes'),
-    # Інші URL-и
 ]
